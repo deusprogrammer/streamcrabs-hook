@@ -95,7 +95,7 @@ wss.on('connection', async (ws) => {
                             broadcasterName,
                             userId,
                             userName,
-                            subTier: tier
+                            subPlan: tier
                         }));
                     }));
                 }
