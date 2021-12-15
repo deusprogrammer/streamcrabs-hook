@@ -27,6 +27,15 @@ listener.listen();
 const wss = new WebSocket.Server({ port: 8081 });
 const clients = {};
 
+const removeListener = ({listeners, ws, interval}) => {
+    // Kill listeners
+    for (const l of listeners) {
+        listener.removeListener(l);
+    }
+    clearInterval(interval);
+    ws.close();
+}
+
 wss.on('connection', async (ws) => {
     console.log("CONNECTION");
     ws.on('message', async (message) => {
@@ -68,21 +77,43 @@ wss.on('connection', async (ws) => {
                     }));
                 }
 
-                clients[channelId] = {
-                    listeners
+                const client = {
+                    ws,
+                    channelId,
+                    listeners,
+                    lastPing: Date.now()
                 };
+
+                client.interval = setInterval(() => {
+                    // If connection is stale, remove connection
+                    if (Date.now() - lastPing > 60000) {
+                        console.log(`Removing listeners for ${channelId}`);
+                        removeListener(client);
+                    }
+                    ws.send(JSON.stringify({
+                        type: "PING"
+                    }));
+                }, 30000);
+
+                clients[channelId] = client;
+
                 break;
             case "DISCONNECT":
                 if (!(channelId in clients)) {
                     return;
                 }
 
-                // Kill listeners
-                for (const l of clients[channelId].listeners) {
-                    listener.removeListener(l);
-                }
+                removeListener(clients[channelId]);
+
                 clients[channelId] = null;
                 ws.close();
+                break;
+            case "PONG":
+                if (!(channelId in clients)) {
+                    return;
+                }
+
+                clients[channelId].lastPing = Date.now();
                 break;
             default:
                 return;
