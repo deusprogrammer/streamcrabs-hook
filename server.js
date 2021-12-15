@@ -18,7 +18,7 @@ const listener = new EventSubListener({
         pathPrefix: '/api/twitch-hooks',
         port: 8080
 	}),
-	secret: "1234",
+	secret: SHARED_SECRET,
     logger: {
         minLevel: "DEBUG"
     }
