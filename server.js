@@ -86,7 +86,7 @@ wss.on('connection', async (ws) => {
 
                 client.interval = setInterval(() => {
                     // If connection is stale, remove connection
-                    if (Date.now() - lastPing > 60000) {
+                    if (Date.now() - client.lastPing > 60000) {
                         console.log(`Removing listeners for ${channelId}`);
                         removeListener(client);
                     }
