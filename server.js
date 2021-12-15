@@ -26,10 +26,7 @@ const listener = new EventSubListener({
 
 listener.listen();
 
-console.log("Started hook server on 8080");
-console.log("CLIENT ID     " + CLIENT_ID);
-console.log("CLIENT SECRET " + CLIENT_SECRET);
-console.log("SECRET:       " + SHARED_SECRET);
+console.log("* Started hook server on 8080");
 
 // Fire up a websocket to act as a communication hub for all bots
 const wss = new WebSocket.Server({ port: 8081 });
