@@ -11,6 +11,10 @@ const SHARED_SECRET = process.env.TWITCH_SHARED_SECRET;
 const authProvider = new ClientCredentialsAuthProvider(CLIENT_ID, CLIENT_SECRET);
 const apiClient = new ApiClient({ authProvider });
 
+// Clear all subscriptions
+apiClient.eventSub.deleteAllSubscriptions();
+
+// Setup listener
 const listener = new EventSubListener({
 	apiClient,
 	adapter: new ReverseProxyAdapter({
@@ -72,12 +76,39 @@ wss.on('connection', async (ws) => {
                         }));
                     }));
                 }
+
                 if (listenTo.includes("OFFLINE")) {
                     listeners.push(listener.subscribeToStreamOfflineEvents(channelId, ({broadcasterId, broadcasterName}) => {
                         ws.send(JSON.stringify({
                             type: "OFFLINE",
                             broadcasterId,
                             broadcasterName
+                        }));
+                    }));
+                }
+
+                if (listenTo.includes("SUB")) {
+                    listeners.push(listener.subscribeToChannelSubscriptionEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
+                        ws.send(JSON.stringify({
+                            type: "SUB",
+                            broadcasterId,
+                            broadcasterName,
+                            userId,
+                            userName,
+                            subTier: tier
+                        }));
+                    }));
+                }
+
+                if (listenTo.includes("CHEER")) {
+                    listeners.push(listener.subscribeToChannelCheerEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, bits}) => {
+                        ws.send(JSON.stringify({
+                            type: "CHEER",
+                            broadcasterId,
+                            broadcasterName,
+                            userId,
+                            userName,
+                            bits
                         }));
                     }));
                 }
