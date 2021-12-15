@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/main.js"
+    "start": "nodemon -r esm server.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,8 @@
     "@twurple/api": "^5.0.11",
     "@twurple/auth": "^5.0.11",
     "@twurple/eventsub": "^5.0.11",
+    "esm": "^3.2.25",
+    "nodemon": "^2.0.15",
     "ws": "^8.3.0"
   }
 }
