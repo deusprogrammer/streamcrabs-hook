@@ -11,9 +11,6 @@ const SHARED_SECRET = process.env.TWITCH_SHARED_SECRET;
 const authProvider = new ClientCredentialsAuthProvider(CLIENT_ID, CLIENT_SECRET);
 const apiClient = new ApiClient({ authProvider });
 
-// Clear all subscriptions
-apiClient.eventSub.deleteAllSubscriptions();
-
 // Setup listener
 const listener = new EventSubListener({
 	apiClient,
