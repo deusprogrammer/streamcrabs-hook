@@ -85,7 +85,17 @@ wss.on('connection', async (ws) => {
                 }
 
                 if (listenTo.includes("SUB")) {
-                    listeners.push(listener.subscribeToChannelSubscriptionEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
+                    // listeners.push(listener.subscribeToChannelSubscriptionEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
+                    //     ws.send(JSON.stringify({
+                    //         type: "SUB",
+                    //         broadcasterId,
+                    //         broadcasterName,
+                    //         userId,
+                    //         userName,
+                    //         subPlan: tier
+                    //     }));
+                    // }));
+                    listeners.push(listener.subscribeToChannelSubscriptionMessageEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
                         ws.send(JSON.stringify({
                             type: "SUB",
                             broadcasterId,
