@@ -121,13 +121,14 @@ wss.on('connection', async (ws) => {
                 }
 
                 if (listenTo.includes("REDEMPTION")) {
-                    listeners.push(listener.subscribeToChannelRedemptionAddEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, rewardId, rewardTitle, rewardCost}) => {
+                    listeners.push(listener.subscribeToChannelRedemptionAddEvents(channelId, ({id, broadcasterId, broadcasterName, userId, userName, rewardId, rewardTitle, rewardCost}) => {
                         ws.send(JSON.stringify({
                             type: "REDEMPTION",
                             broadcasterId,
                             broadcasterName,
                             userId,
                             userName,
+                            id,
                             rewardId,
                             rewardTitle,
                             rewardCost
