@@ -85,19 +85,19 @@ wss.on('connection', async (ws) => {
                 }
 
                 if (listenTo.includes("SUB")) {
-                    // listeners.push(listener.subscribeToChannelSubscriptionEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
-                    //     ws.send(JSON.stringify({
-                    //         type: "SUB",
-                    //         broadcasterId,
-                    //         broadcasterName,
-                    //         userId,
-                    //         userName,
-                    //         subPlan: tier
-                    //     }));
-                    // }));
-                    listeners.push(listener.subscribeToChannelSubscriptionMessageEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
+                    listeners.push(listener.subscribeToChannelSubscriptionEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
                         ws.send(JSON.stringify({
                             type: "SUB",
+                            broadcasterId,
+                            broadcasterName,
+                            userId,
+                            userName,
+                            subPlan: tier
+                        }));
+                    }));
+                    listeners.push(listener.subscribeToChannelSubscriptionMessageEvents(channelId, ({broadcasterId, broadcasterName, userId, userName, tier}) => {
+                        ws.send(JSON.stringify({
+                            type: "SUB_ANNOUNCE",
                             broadcasterId,
                             broadcasterName,
                             userId,
@@ -121,7 +121,7 @@ wss.on('connection', async (ws) => {
                 }
 
                 if (listenTo.includes("REDEMPTION")) {
-                    listeners.push(listener.subscribeToChannelRedemptionAddEvents(channelId, ({id, broadcasterId, broadcasterName, userId, userName, rewardId, rewardTitle, rewardCost}) => {
+                    listeners.push(listener.subscribeToChannelRedemptionAddEvents(channelId, ({id, broadcasterId, broadcasterName, userId, userName, rewardId, rewardTitle, rewardCost, rewardPrompt}) => {
                         ws.send(JSON.stringify({
                             type: "REDEMPTION",
                             broadcasterId,
@@ -131,7 +131,8 @@ wss.on('connection', async (ws) => {
                             id,
                             rewardId,
                             rewardTitle,
-                            rewardCost
+                            rewardCost,
+                            rewardPrompt
                         }));
                     }));
                 }
